@@ -1,0 +1,300 @@
+<wsdl:definitions name="uDirectory"
+	targetNamespace="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory"
+	xmlns:ud="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory"
+	xmlns:itt="http://www.ricoh.co.jp/xmlns/schema/rdh/commontypes"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap-enc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+	
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://www.ricoh.co.jp/xmlns/schema/rdh/commontypes"
+			xmlns:itt="http://www.ricoh.co.jp/xmlns/schema/rdh/commontypes"
+			xmlns:soap-enc="http://schemas.xmlsoap.org/soap/encoding/"
+			xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+			<xsd:complexType name="property">
+				<xsd:sequence>
+					<xsd:element name="propName" type="xsd:string"/>
+					<xsd:element name="propVal" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="propertyList">
+				<xsd:complexContent>
+					<xsd:restriction base="soap-enc:Array">
+						<xsd:attribute ref="soap-enc:arrayType" wsdl:arrayType="itt:property[]"/>
+					</xsd:restriction>
+				</xsd:complexContent>
+<!--				<xsd:sequence minOccurs="0" maxOccurs="unbounded" nillable="true">
+					<xsd:element name="item" type="udxsd:propertyItem"/>
+				</xsd:sequence> -->
+			</xsd:complexType>
+
+			<xsd:complexType name="propertyListArray">
+				<xsd:complexContent>
+					<xsd:restriction base="soap-enc:Array">
+						<xsd:attribute ref="soap-enc:arrayType" wsdl:arrayType="itt:propertyList[]"/>
+					</xsd:restriction>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+			<xsd:complexType name="stringArray">
+				<xsd:complexContent>
+					<xsd:restriction base="soap-enc:Array">
+						<xsd:attribute ref="soap-enc:arrayType" wsdl:arrayType="xsd:string[]"/>
+					</xsd:restriction>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+			<xsd:complexType name="queryTerm">
+				<xsd:sequence>
+					<xsd:element name="operator" type="xsd:string"/>
+					<xsd:element name="propName" type="xsd:string"/>
+					<xsd:element name="propVal" type="xsd:string"/>
+					<xsd:element name="propVal2" type="xsd:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="queryTermArray">
+				<xsd:complexContent>
+					<xsd:restriction base="soap-enc:Array">
+						<xsd:attribute ref="soap-enc:arrayType" wsdl:arrayType="itt:queryTerm[]"/>
+					</xsd:restriction>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+			<xsd:complexType name="queryOrderBy">
+				<xsd:sequence>
+					<xsd:element name="propName" type="xsd:string"/>
+					<xsd:element name="isDecending" type="xsd:boolean"/>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="queryOrderByArray">
+				<xsd:complexContent>
+					<xsd:restriction base="soap-enc:Array">
+						<xsd:attribute ref="soap-enc:arrayType" wsdl:arrayType="itt:queryOrderBy[]"/>
+					</xsd:restriction>
+				</xsd:complexContent>
+			</xsd:complexType>
+
+		</xsd:schema>
+	</wsdl:types>
+	
+	<wsdl:message name="emptyRequest">
+	</wsdl:message>
+
+	<wsdl:message name="getProtocolVersionResponse">
+		<wsdl:part name="returnValue" type="xsd:int"/>
+	</wsdl:message>
+
+	<wsdl:message name="getServiceVersionResponse">
+		<wsdl:part name="returnValue" type="itt:propertyList"/>
+	</wsdl:message>
+
+	<wsdl:message name="startSessionRequest">
+		<wsdl:part name="stringIn" type="xsd:string"/>
+		<wsdl:part name="timeLimit" type="xsd:int"/>
+		<wsdl:part name="lockMode" type="xsd:string"/><!-- "S" for shared (readonly), "X" for exclusive (allow updates) -->
+	</wsdl:message>
+
+	<wsdl:message name="startSessionResponse">
+		<wsdl:part name="returnValue" type="xsd:string"/>
+		<wsdl:part name="stringOut" type="xsd:string"/>
+	</wsdl:message>
+
+	<wsdl:message name="terminateSessionRequest">
+		<wsdl:part name="sessionId" type="xsd:string"/>
+	</wsdl:message>
+
+	<wsdl:message name="terminateSessionResponse">
+		<wsdl:part name="returnValue" type="xsd:string"/>
+	</wsdl:message>
+
+	<wsdl:message name="searchObjectsRequest">
+		<wsdl:part name="sessionId" type="xsd:string"/>
+		<wsdl:part name="selectProps" type="itt:stringArray"/>
+		<wsdl:part name="fromClass" type="xsd:string"/>
+		<wsdl:part name="parentObjectId" type="xsd:string"/>
+		<wsdl:part name="resultSetId" type="xsd:string"/>
+		<wsdl:part name="whereAnd" type="itt:queryTermArray"/>
+		<wsdl:part name="whereOr" type="itt:queryTermArray"/>
+		<wsdl:part name="orderBy" type="itt:queryOrderByArray"/>
+		<wsdl:part name="rowOffset" type="xsd:int"/>
+		<wsdl:part name="rowCount" type="xsd:int"/>
+		<wsdl:part name="lastObjectId" type="xsd:string"/>
+		<wsdl:part name="queryOptions" type="itt:propertyList"/>
+	</wsdl:message>
+
+	<wsdl:message name="searchObjectsResponse">
+		<wsdl:part name="returnValue" type="xsd:string"/>
+		<wsdl:part name="resultSetId" type="xsd:string"/>
+		<wsdl:part name="numOfResults" type="xsd:int"/>
+		<wsdl:part name="rowList" type="itt:propertyListArray"/>
+	</wsdl:message>
+
+	<wsdl:message name="getObjectsPropsRequest">
+		<wsdl:part name="sessionId" type="xsd:string"/>
+		<wsdl:part name="objectIdList" type="itt:stringArray"/>
+		<wsdl:part name="selectProps" type="itt:stringArray"/>
+		<wsdl:part name="options" type="itt:propertyList"/>
+	</wsdl:message>
+
+	<wsdl:message name="getObjectsPropsResponse">
+		<wsdl:part name="returnValue" type="itt:propertyListArray"/>
+	</wsdl:message>
+
+	<wsdl:message name="putObjectPropsRequest">
+		<wsdl:part name="sessionId" type="xsd:string"/>
+		<wsdl:part name="objectId" type="xsd:string"/>
+		<wsdl:part name="propList" type="itt:propertyList"/>
+		<wsdl:part name="options" type="itt:propertyList"/>
+	</wsdl:message>
+
+	<wsdl:message name="putObjectPropsResponse">
+		<wsdl:part name="returnValue" type="xsd:string"/>
+	</wsdl:message>
+
+	<wsdl:portType name="uDirectoryPortType">
+
+		<wsdl:operation name="getProtocolVersion">
+			<wsdl:documentation>Get the version of the protocol in use</wsdl:documentation>
+			<wsdl:input message="ud:emptyRequest"/>
+			<wsdl:output message="ud:getProtocolVersionResponse"/>
+			<!-- <wsdl:fault message="es:getProtocolVersionFault"/> -->
+		</wsdl:operation>
+
+		<wsdl:operation name="getServiceVersion">
+			<wsdl:documentation>Get the version of the protocol in use</wsdl:documentation>
+			<wsdl:input message="ud:emptyRequest"/>
+			<wsdl:output message="ud:getServiceVersionResponse"/>
+			<!-- <wsdl:fault message="es:getProtocolVersionFault"/> -->
+		</wsdl:operation>
+
+		<wsdl:operation name="startSession">
+			<wsdl:documentation>Log in and create a session</wsdl:documentation>
+			<wsdl:input message="ud:startSessionRequest"/>
+			<wsdl:output message="ud:startSessionResponse"/>
+		</wsdl:operation>
+
+		<wsdl:operation name="terminateSession">
+			<wsdl:documentation>Log out from an active session</wsdl:documentation>
+			<wsdl:input message="ud:terminateSessionRequest"/>
+			<wsdl:output message="ud:terminateSessionResponse"/>
+		</wsdl:operation>
+
+		<wsdl:operation name="searchObjects">
+			<wsdl:documentation>Perform a search of the directory</wsdl:documentation>
+			<wsdl:input message="ud:searchObjectsRequest"/>
+			<wsdl:output message="ud:searchObjectsResponse"/>
+		</wsdl:operation>
+
+		<wsdl:operation name="getObjectsProps">
+			<wsdl:documentation>Get the properties of one or more objects</wsdl:documentation>
+			<wsdl:input message="ud:getObjectsPropsRequest"/>
+			<wsdl:output message="ud:getObjectsPropsResponse"/>
+		</wsdl:operation>
+
+		<wsdl:operation name="putObjectProps">
+			<wsdl:documentation>Set the properties of an object</wsdl:documentation>
+			<wsdl:input message="ud:putObjectPropsRequest"/>
+			<wsdl:output message="ud:putObjectPropsResponse"/>
+		</wsdl:operation>
+
+	</wsdl:portType>
+
+	<wsdl:binding name="uDirectory" type="ud:uDirectoryPortType">
+		<!--<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>-->
+		<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+		<wsdl:operation name="getProtocolVersion">
+			<soap:operation soapAction="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory#getProtocolVersion"/>
+			<wsdl:input>
+				<soap:body use="encoded" namespace="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="encoded" namespace="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory"/>
+			</wsdl:output>
+			<!--
+			<wsdl:fault>
+				<soap:body use="literal" namespace="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory.xsd"/>
+			</wsdl:fault>
+			-->
+		</wsdl:operation>
+
+		<wsdl:operation name="getServiceVersion">
+			<soap:operation soapAction="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory#getServiceVersion"/>
+			<wsdl:input>
+				<soap:body use="encoded" namespace="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="encoded" namespace="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory"/>
+			</wsdl:output>
+			<!--
+			<wsdl:fault>
+				<soap:body use="literal" namespace="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory.xsd"/>
+			</wsdl:fault>
+			-->
+		</wsdl:operation>
+
+		<wsdl:operation name="startSession">
+			<soap:operation soapAction="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory#startSession"/>
+			<wsdl:input>
+				<soap:body use="encoded" namespace="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="encoded" namespace="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory"/>
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="terminateSession">
+			<soap:operation soapAction="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory#terminateSession"/>
+			<wsdl:input>
+				<soap:body use="encoded" namespace="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="encoded" namespace="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory"/>
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="searchObjects">
+			<soap:operation soapAction="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory#searchObjects"/>
+			<wsdl:input>
+				<soap:body use="encoded" namespace="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="encoded" namespace="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory"/>
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="getObjectsProps">
+			<soap:operation soapAction="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory#getObjectsProps"/>
+			<wsdl:input>
+				<soap:body use="encoded" namespace="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="encoded" namespace="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory"/>
+			</wsdl:output>
+		</wsdl:operation>
+
+		<wsdl:operation name="putObjectProps">
+			<soap:operation soapAction="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory#putObjectProps"/>
+			<wsdl:input>
+				<soap:body use="encoded" namespace="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="encoded" namespace="http://www.ricoh.co.jp/xmlns/soap/rdh/udirectory"/>
+			</wsdl:output>
+		</wsdl:operation>
+
+	</wsdl:binding>
+
+	<wsdl:service name="uDirectory">
+		<wsdl:documentation>Ricoh uDirectory Service</wsdl:documentation> 
+		<wsdl:port name="uDirectory" binding="ud:uDirectory">
+			<soap:address location="http://ricoh8000.research.uq.edu.au/DH/udirectory"/> -->
+		</wsdl:port>
+	</wsdl:service>
+
+</wsdl:definitions>

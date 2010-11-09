@@ -1,0 +1,1 @@
+wsdl2h -o ricoh-udirectory.h ricoh-udirectory.wsdl && soapcpp2 -C -i ricoh-udirectory.h -I/usr/share/gsoap/import
