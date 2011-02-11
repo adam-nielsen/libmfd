@@ -1,5 +1,5 @@
 Library for accessing multi-function devices (networked photocopiers)
-Copyright 2010 Adam Nielsen <adam.nielsen@uq.edu.au>
+Copyright 2010-2011 Adam Nielsen <adam.nielsen@uq.edu.au>
 
 This library provides a standard method for remotely configuring MFDs.  It
 includes an example command line application which both demonstrates how to
@@ -9,19 +9,29 @@ library's functionality via the command line.
 This library is still in the *very* early stages of development so is mostly
 non-functional at present.
 
+Currently supported devices:
+
+ * Ricoh Aficio
+    - MP5000
+    - MP8000
+
 Installation instructions:
 
-  git version only:
+  Prepare: (git version only)
 
     $ ./autogen.sh
     $ cd src
     $ ./generate-gsoap
     $ cd ..
 
-  all versions:
+  Then git and other versions:
 
     $ ./configure
     $ make
     $ make install
+    $ mfdmgr --help
 
-This program is released under the GPLv3 license.
+You will need the Boost C++ library installed before compiling.
+
+This library and example programs are released under the GPLv3 license.  It
+contains code from the gSOAP library which may be licensed differently.

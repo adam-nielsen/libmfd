@@ -6,7 +6,7 @@
 	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
 	xmlns:soap-enc="http://schemas.xmlsoap.org/soap/encoding/"
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-	
+
 	<wsdl:types>
 		<xsd:schema targetNamespace="http://www.ricoh.co.jp/xmlns/schema/rdh/commontypes"
 			xmlns:itt="http://www.ricoh.co.jp/xmlns/schema/rdh/commontypes"
