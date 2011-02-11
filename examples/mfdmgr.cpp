@@ -294,6 +294,10 @@ finishTesting:
 		std::cerr << PROGNAME ": " << e.what()
 			<< ".  Use --help for help." << std::endl;
 		return RET_BADARGS;
+	} catch (mfd::ECommFailure& e) {
+		std::cerr << PROGNAME ": Communication failure (" << e.what()
+			<< ")" << std::endl;
+		return RET_SHOWSTOPPER;
 	}
 
 	return RET_OK;
