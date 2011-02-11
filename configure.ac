@@ -21,7 +21,7 @@ AC_PROG_LIBTOOL
 BOOST_REQUIRE([1.37])
 BOOST_PROGRAM_OPTIONS
 
-PKG_CHECK_MODULES([gsoap], [gsoap++]);
+#PKG_CHECK_MODULES([gsoap], [gsoap++]);
 
 # Checks for header files.
 
